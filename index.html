@@ -422,6 +422,19 @@
       transform: translateY(0);
     }
 
+    /* ── Disable custom cursor on touch devices ── */
+    @media (pointer: coarse) {
+      body { cursor: auto; }
+      .cursor,
+      .cursor-ring {
+        display: none;
+      }
+      .btn,
+      .project-card {
+        cursor: auto;
+      }
+    }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       nav { padding: 1.2rem 1.5rem; }
