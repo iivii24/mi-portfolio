@@ -435,6 +435,116 @@
       }
     }
 
+    /* ── Scroll progress bar ── */
+    #scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      z-index: 1001;
+      transition: width .1s linear;
+      pointer-events: none;
+    }
+
+    /* ── Back to top button ── */
+    #back-to-top {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 1.1rem;
+      cursor: none;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s, border-color .25s, color .25s, transform .25s;
+    }
+    #back-to-top.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    #back-to-top:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    /* ── Contact form layout ── */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .contact-left p {
+      color: var(--muted); font-size: .9rem; line-height: 1.8; margin-bottom: 2.5rem;
+    }
+    .contact-form-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      letter-spacing: -.01em;
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+    .form-group label {
+      font-size: .7rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .form-group input,
+    .form-group textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: .75rem 1rem;
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: .85rem;
+      outline: none;
+      transition: border-color .2s;
+      resize: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--muted);
+    }
+    .form-submit {
+      margin-top: .5rem;
+      align-self: flex-start;
+    }
+    .form-success {
+      display: none;
+      margin-top: .75rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid rgba(163,217,119,.3);
+      border-radius: 6px;
+      background: rgba(163,217,119,.05);
+      color: var(--accent);
+      font-size: .82rem;
+      line-height: 1.6;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 768px) {
       nav { padding: 1.2rem 1.5rem; }
@@ -444,10 +554,15 @@
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
       .about-visual { display: none; }
       .nav-links { gap: 1.5rem; }
+      .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+      #back-to-top { bottom: 1.5rem; right: 1.5rem; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Scroll progress -->
+  <div id="scroll-progress"></div>
 
   <!-- Cursor -->
   <div class="cursor" id="cursor"></div>
@@ -562,46 +677,77 @@
   <!-- Contact -->
   <section id="contact">
     <div class="section-label reveal">Contacto</div>
-    <div class="contact-inner">
-      <h2 class="reveal">¿Hablamos?</h2>
-      <p class="reveal">
-        Estoy abierto a nuevas oportunidades, colaboraciones o simplemente
-        a conectar con otros desarrolladores. No dudes en escribirme.
-      </p>
-      <div class="contact-links reveal">
-        <a href="mailto:ruizcostaivan9@gmail.com" class="contact-item">
-          <div class="contact-item-left">
-            <div class="contact-item-icon">✉</div>
-            <div>
-              <div class="contact-item-label">Email</div>
-              <div class="contact-item-sub">ruizcostaivan9@gmail.com</div>
+    <h2 class="reveal">¿Hablamos?</h2>
+    <div class="contact-layout">
+      <div class="contact-left reveal">
+        <p>
+          Estoy abierto a nuevas oportunidades, colaboraciones o simplemente
+          a conectar con otros desarrolladores. No dudes en escribirme.
+        </p>
+        <div class="contact-links">
+          <a href="mailto:ruizcostaivan9@gmail.com" class="contact-item">
+            <div class="contact-item-left">
+              <div class="contact-item-icon">✉</div>
+              <div>
+                <div class="contact-item-label">Email</div>
+                <div class="contact-item-sub">ruizcostaivan9@gmail.com</div>
+              </div>
             </div>
-          </div>
-          <span class="contact-item-arrow">→</span>
-        </a>
-        <a href="https://github.com/iivii24" target="_blank" class="contact-item">
-          <div class="contact-item-left">
-            <div class="contact-item-icon">⌥</div>
-            <div>
-              <div class="contact-item-label">GitHub</div>
-              <div class="contact-item-sub">github.com/iivii24</div>
+            <span class="contact-item-arrow">→</span>
+          </a>
+          <a href="https://github.com/iivii24" target="_blank" class="contact-item">
+            <div class="contact-item-left">
+              <div class="contact-item-icon">⌥</div>
+              <div>
+                <div class="contact-item-label">GitHub</div>
+                <div class="contact-item-sub">github.com/iivii24</div>
+              </div>
             </div>
-          </div>
-          <span class="contact-item-arrow">→</span>
-        </a>
-        <a href="https://www.linkedin.com/in/iv%C3%A1n-ruiz-1105552a5/" target="_blank" class="contact-item">
-          <div class="contact-item-left">
-            <div class="contact-item-icon">in</div>
-            <div>
-              <div class="contact-item-label">LinkedIn</div>
-              <div class="contact-item-sub">linkedin.com/in/iv%C3%A1n-ruiz-1105552a5/</div>
+            <span class="contact-item-arrow">→</span>
+          </a>
+          <a href="https://www.linkedin.com/in/iv%C3%A1n-ruiz-1105552a5/" target="_blank" class="contact-item">
+            <div class="contact-item-left">
+              <div class="contact-item-icon">in</div>
+              <div>
+                <div class="contact-item-label">LinkedIn</div>
+                <div class="contact-item-sub">linkedin.com/in/iván-ruiz-1105552a5/</div>
+              </div>
             </div>
+            <span class="contact-item-arrow">→</span>
+          </a>
+        </div>
+      </div>
+      <div class="contact-right reveal">
+        <div class="contact-form-title">Envíame un mensaje</div>
+        <!-- Reemplaza YOUR_FORM_ID con tu ID de Formspree (formspree.io) -->
+        <form class="contact-form" id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input type="text" id="name" name="name" placeholder="Tu nombre" required>
           </div>
-          <span class="contact-item-arrow">→</span>
-        </a>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="subject">Asunto</label>
+            <input type="text" id="subject" name="subject" placeholder="¿De qué quieres hablar?">
+          </div>
+          <div class="form-group">
+            <label for="message">Mensaje</label>
+            <textarea id="message" name="message" rows="5" placeholder="Escribe tu mensaje..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary form-submit">Enviar mensaje</button>
+          <div class="form-success" id="form-success">
+            ✓ Mensaje enviado correctamente. Te responderé pronto.
+          </div>
+        </form>
       </div>
     </div>
   </section>
+
+  <!-- Back to top -->
+  <button id="back-to-top" aria-label="Volver arriba">↑</button>
 
   <!-- Footer -->
   <footer>
@@ -645,10 +791,24 @@
       });
     });
 
-    // ── Navbar on scroll
-    const navbar = document.getElementById('navbar');
+    // ── Navbar on scroll + scroll progress + back to top
+    const navbar      = document.getElementById('navbar');
+    const scrollBar   = document.getElementById('scroll-progress');
+    const backToTop   = document.getElementById('back-to-top');
+
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 40);
+
+      // Scroll progress bar
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      scrollBar.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
+
+      // Back to top visibility
+      backToTop.classList.toggle('visible', window.scrollY > 400);
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     // ── Scroll reveal
@@ -662,6 +822,36 @@
       });
     }, { threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
+
+    // ── Contact form — Formspree AJAX submission
+    const contactForm = document.getElementById('contact-form');
+    const formSuccess = document.getElementById('form-success');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const submitBtn = contactForm.querySelector('.form-submit');
+        submitBtn.textContent = 'Enviando...';
+        submitBtn.disabled = true;
+        try {
+          const res = await fetch(contactForm.action, {
+            method: 'POST',
+            body: new FormData(contactForm),
+            headers: { Accept: 'application/json' }
+          });
+          if (res.ok) {
+            contactForm.reset();
+            formSuccess.style.display = 'block';
+            submitBtn.style.display = 'none';
+          } else {
+            submitBtn.textContent = 'Error — inténtalo de nuevo';
+            submitBtn.disabled = false;
+          }
+        } catch {
+          submitBtn.textContent = 'Error — inténtalo de nuevo';
+          submitBtn.disabled = false;
+        }
+      });
+    }
 
     // ── Glitch effect on logo hover
     const logo = document.querySelector('.nav-logo');
